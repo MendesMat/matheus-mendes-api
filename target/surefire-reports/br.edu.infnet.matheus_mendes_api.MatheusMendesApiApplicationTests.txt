@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: br.edu.infnet.matheus_mendes_api.MatheusMendesApiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.836 s -- in br.edu.infnet.matheus_mendes_api.MatheusMendesApiApplicationTests
