@@ -6,6 +6,6 @@ public interface CrudService<T, ID> {
 	T incluir(T entidade);
 	T obterPorId(ID id);
 	Collection<T> obterLista();
-	T alterar(T entidade, ID id);
-	void excluir(ID id);
+	T atualizar(ID id, T entidade);
+	boolean excluir(ID id);
 }

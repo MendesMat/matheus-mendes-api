@@ -13,34 +13,41 @@ import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimico;
 @Service
 public class ProdutoQuimicoService implements CrudService<ProdutoQuimico, Integer> {
 
-	private final Map<Integer, ProdutoQuimico> mapaProdutosQuimicos = new ConcurrentHashMap<>();
-	private final AtomicInteger nextId = new AtomicInteger(1);
-	
-	@Override
-	public ProdutoQuimico incluir(ProdutoQuimico produto) {
-		Integer id = nextId.getAndIncrement();
-		produto.setId(id);
-		mapaProdutosQuimicos.put(produto.getId(), produto);
-		return produto;
-	}
+    private final Map<Integer, ProdutoQuimico> mapaProdutos = new ConcurrentHashMap<>();
+    private final AtomicInteger nextId = new AtomicInteger(1);
 
-	@Override
-	public ProdutoQuimico obterPorId(Integer id) {
-		return mapaProdutosQuimicos.get(id);
-	}
+    @Override
+    public ProdutoQuimico incluir(ProdutoQuimico produto) {
+        Integer id = nextId.getAndIncrement();
+        produto.setId(id);
+        mapaProdutos.put(id, produto);
+        return produto;
+    }
 
-	@Override
-	public Collection<ProdutoQuimico> obterLista() {
-		return mapaProdutosQuimicos.values();
-	}
+    @Override
+    public ProdutoQuimico obterPorId(Integer id) {
+        return mapaProdutos.get(id);
+    }
 
-	@Override
-	public ProdutoQuimico alterar(ProdutoQuimico produto, Integer id) {
-		return mapaProdutosQuimicos.put(id, produto);
-	}
+    @Override
+    public Collection<ProdutoQuimico> obterLista() {
+        return mapaProdutos.values();
+    }
 
-	@Override
-	public void excluir(Integer id) {
-		mapaProdutosQuimicos.remove(id);
-	}
+    @Override
+    public ProdutoQuimico atualizar(Integer id, ProdutoQuimico produto) {
+        if (!mapaProdutos.containsKey(id)) return null;
+
+        produto.setId(id);
+        mapaProdutos.put(id, produto);
+        return produto;
+    }
+
+    @Override
+    public boolean excluir(Integer id) {
+        if (!mapaProdutos.containsKey(id)) return false;
+
+        mapaProdutos.remove(id);
+        return true;
+    }
 }

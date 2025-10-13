@@ -35,13 +35,19 @@ public class FabricanteService implements CrudService<Fabricante, Integer> {
     }
 
     @Override
-    public Fabricante alterar(Fabricante fabricante, Integer id) {
-        mapaFabricantes.put(id, fabricante);
+    public Fabricante atualizar(Integer id, Fabricante fabricante) {
+        if(!mapaFabricantes.containsKey(id)) return null;
+    	
+    	fabricante.setId(id);
+    	mapaFabricantes.put(id, fabricante);
         return fabricante;
     }
 
     @Override
-    public void excluir(Integer id) {
+    public boolean excluir(Integer id) {
+        if (!mapaFabricantes.containsKey(id)) return false;
+        
         mapaFabricantes.remove(id);
+        return true;
     }
 }
