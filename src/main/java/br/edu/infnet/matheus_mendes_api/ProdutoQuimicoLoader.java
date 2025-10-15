@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.boot.ApplicationArguments;
@@ -29,8 +28,8 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
 	private final ProdutoQuimicoService produtoQuimicoService;
 	private FabricanteLoader fabricanteLoader;
 	
-	public ProdutoQuimicoLoader(FabricanteLoader fabricanteLoader) {
-        this.produtoQuimicoService = new ProdutoQuimicoService();
+	public ProdutoQuimicoLoader(ProdutoQuimicoService produtoQuimicoService, FabricanteLoader fabricanteLoader) {
+        this.produtoQuimicoService = produtoQuimicoService;
 		this.fabricanteLoader = fabricanteLoader;
     }
 	
@@ -40,9 +39,8 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
 		List<Fabricante> fabricantes = fabricanteLoader.getFabricantes();
         carregarProdutosQuimicos("produtos-quimicos-listagem.csv", fabricantes);
         
-        System.out.println("=== Produtos Cadastrados ===");
-        Collection<ProdutoQuimico> produtos = produtoQuimicoService.obterLista();
-        produtos.forEach(produto -> System.out.println(produto.toString()));
+        System.out.println("=== PRODUTOS QUIMICOS ===");
+        produtoQuimicoService.obterLista().forEach(System.out::println);
 	}
 	
 	private void carregarProdutosQuimicos(String caminhoArquivo, List<Fabricante> fabricantes) throws IOException {
@@ -54,7 +52,7 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
 	    while ((linha = leitor.readLine()) != null) {
 	        String[] campos = linha.split(",");
 	        
-	        Fabricante fabricante = i < fabricantes.size() 
+	        Fabricante fabricante = i < fabricantes.size()
 	        		? fabricantes.get(i) : fabricantes.get(fabricantes.size()-1);
 	
 	        ProdutoQuimico produto = new ProdutoQuimico(

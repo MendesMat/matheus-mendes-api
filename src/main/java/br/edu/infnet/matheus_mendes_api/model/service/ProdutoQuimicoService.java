@@ -14,7 +14,7 @@ import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimico;
 public class ProdutoQuimicoService implements CrudService<ProdutoQuimico, Integer> {
 
     private final Map<Integer, ProdutoQuimico> mapaProdutos = new ConcurrentHashMap<>();
-    private final AtomicInteger nextId = new AtomicInteger(1);
+    private final AtomicInteger nextId = new AtomicInteger(0);
 
     @Override
     public ProdutoQuimico incluir(ProdutoQuimico produto) {

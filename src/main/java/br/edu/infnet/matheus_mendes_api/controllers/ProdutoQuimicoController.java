@@ -7,7 +7,7 @@ import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
 import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimico;
 
 @RestController
-@RequestMapping("/api/produto-quimico")
+@RequestMapping("/api/produtos")
 public class ProdutoQuimicoController extends BaseCrudController<ProdutoQuimico, Integer> {
 
     public ProdutoQuimicoController(CrudService<ProdutoQuimico, Integer> service) {

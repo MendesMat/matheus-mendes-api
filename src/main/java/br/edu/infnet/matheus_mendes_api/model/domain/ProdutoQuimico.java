@@ -44,10 +44,10 @@ public class ProdutoQuimico {
 		this.registroAnvisa = registroAnvisa;
 		this.validadeRegistroAnvisa = validadeRegistroAnvisa;
 		this.tipoAtivo = tipoAtivo;
+		this.formaFarmaceutica = formaFarmaceutica;
 		this.principioAtivo = principioAtivo;
 		this.concentracao = concentracao;
 		this.diluente = diluente;
-		this.formaFarmaceutica = formaFarmaceutica;
 		this.unidadeMedida = unidadeMedida;
 		this.embalagem = embalagem;
 		this.quantidadePorEmbalagem = quantidadePorEmbalagem;
@@ -104,6 +104,14 @@ public class ProdutoQuimico {
 		this.tipoAtivo = tipoAtivo;
 	}
 	
+	public FormaFarmaceutica getFormaFarmaceutica() {
+		return formaFarmaceutica;
+	}
+	
+	public void setFormaFarmaceutica(FormaFarmaceutica formaFarmaceutica) {
+		this.formaFarmaceutica = formaFarmaceutica;
+	}
+	
 	public PrincipioAtivo getPrincipioAtivo() {
 		return principioAtivo;
 	}
@@ -128,13 +136,6 @@ public class ProdutoQuimico {
 		this.diluente = diluente;
 	}
 	
-	public FormaFarmaceutica getFormaFarmaceutica() {
-		return formaFarmaceutica;
-	}
-	
-	public void setFormaFarmaceutica(FormaFarmaceutica formaFarmaceutica) {
-		this.formaFarmaceutica = formaFarmaceutica;
-	}
 	
 	public UnidadeMedida getUnidadeMedida() {
 		return unidadeMedida;
@@ -189,7 +190,7 @@ public class ProdutoQuimico {
 	@Override
 	public String toString() {
 	    return String.format(
-    		"Id .....................: %05d\n" +
+    		"Id .....................: %d\n" +
 	        "Fabricante .............: %-20s\n" +
 	        "Nome Comercial .........: %-20s\n" +
 	        "Registro ANVISA ........: %-15s\n" +

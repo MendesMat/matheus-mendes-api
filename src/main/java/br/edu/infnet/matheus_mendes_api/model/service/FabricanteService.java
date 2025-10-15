@@ -14,7 +14,7 @@ import br.edu.infnet.matheus_mendes_api.model.domain.Fabricante;
 public class FabricanteService implements CrudService<Fabricante, Integer> {
 
     private final Map<Integer, Fabricante> mapaFabricantes = new ConcurrentHashMap<>();
-    private final AtomicInteger nextId = new AtomicInteger(1);
+    private final AtomicInteger nextId = new AtomicInteger(0);
 
     @Override
     public Fabricante incluir(Fabricante fabricante) {
