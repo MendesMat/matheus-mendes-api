@@ -11,14 +11,11 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import br.edu.infnet.matheus_mendes_api.model.domain.Fabricante;
-import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimico;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.Diluente;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.Embalagem;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.FormaFarmaceutica;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.PrincipioAtivo;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.TipoAtivo;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.UnidadeMedida;
+import br.edu.infnet.matheus_mendes_api.model.domain.*;
+import br.edu.infnet.matheus_mendes_api.model.domain.enums.*;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.Desinfetante;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.Inseticida;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.Raticida;
 import br.edu.infnet.matheus_mendes_api.model.service.ProdutoQuimicoService;
 
 @Component
@@ -26,7 +23,7 @@ import br.edu.infnet.matheus_mendes_api.model.service.ProdutoQuimicoService;
 public class ProdutoQuimicoLoader implements ApplicationRunner {
 	
 	private final ProdutoQuimicoService produtoQuimicoService;
-	private FabricanteLoader fabricanteLoader;
+	private final FabricanteLoader fabricanteLoader;
 	
 	public ProdutoQuimicoLoader(ProdutoQuimicoService produtoQuimicoService, FabricanteLoader fabricanteLoader) {
         this.produtoQuimicoService = produtoQuimicoService;
@@ -35,7 +32,6 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		
 		List<Fabricante> fabricantes = fabricanteLoader.getFabricantes();
         carregarProdutosQuimicos("produtos-quimicos-listagem.csv", fabricantes);
         
@@ -44,34 +40,44 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
 	}
 	
 	private void carregarProdutosQuimicos(String caminhoArquivo, List<Fabricante> fabricantes) throws IOException {
-		
+	    
 	    BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
 	    
 	    String linha = null;
 	    int i = 0;
 	    while ((linha = leitor.readLine()) != null) {
 	        String[] campos = linha.split(",");
+	        if (campos.length < 7) continue;
 	        
 	        Fabricante fabricante = i < fabricantes.size()
-	        		? fabricantes.get(i) : fabricantes.get(fabricantes.size()-1);
-	
-	        ProdutoQuimico produto = new ProdutoQuimico(
-                    fabricante,
-                    campos[0].trim(),
-                    campos[1].trim(),
-                    LocalDate.parse(campos[2].trim()),
-                    TipoAtivo.valueOf(campos[3].trim()),
-                    FormaFarmaceutica.valueOf(campos[4].trim()),
-                    PrincipioAtivo.valueOf(campos[5].trim()),
-                    Double.parseDouble(campos[6].trim()),
-                    Diluente.valueOf(campos[7].trim()),
-                    UnidadeMedida.valueOf(campos[8].trim()),
-                    Embalagem.valueOf(campos[9].trim()),
-                    Double.parseDouble(campos[10].trim())
-            );
+	        		? fabricantes.get(i)
+	        		: fabricantes.get(fabricantes.size() - 1);
+
+	        String nomeComercial = campos[0].trim();
+	        String registroAnvisa = campos[1].trim();
+	        LocalDate validade = LocalDate.parse(campos[2].trim());
+	        PrincipioAtivo principioAtivo = PrincipioAtivo.valueOf(campos[3].trim());
+	        double concentracao = Double.parseDouble(campos[4].trim());
+	        Diluente diluente = Diluente.valueOf(campos[5].trim());
+	        FormaFarmaceutica forma = FormaFarmaceutica.valueOf(campos[6].trim());
+
+	        ProdutoQuimicoBase produto;
 	        
+	        if (i < 2) {
+	            produto = new Inseticida(fabricante, nomeComercial, registroAnvisa,
+	            		validade, forma, principioAtivo, concentracao, diluente);
+	        } 
+	        else if (i < 4) {
+	            produto = new Raticida(fabricante, nomeComercial, registroAnvisa,
+	            		validade, forma, principioAtivo, concentracao, diluente);
+	        } 
+	        else {
+	            produto = new Desinfetante(fabricante, nomeComercial, registroAnvisa,
+	            		validade, forma, principioAtivo, concentracao, diluente);
+	        }
+
 	        produtoQuimicoService.incluir(produto);
-	        i++;	        
+	        i++;
 	    }
 	    
 	    leitor.close();

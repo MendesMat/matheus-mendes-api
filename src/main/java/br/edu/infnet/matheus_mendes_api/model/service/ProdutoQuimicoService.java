@@ -8,16 +8,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
-import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimico;
+import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimicoBase;
 
 @Service
-public class ProdutoQuimicoService implements CrudService<ProdutoQuimico, Integer> {
+public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoBase, Integer> {
 
-    private final Map<Integer, ProdutoQuimico> mapaProdutos = new ConcurrentHashMap<>();
+    private final Map<Integer, ProdutoQuimicoBase> mapaProdutos = new ConcurrentHashMap<>();
     private final AtomicInteger nextId = new AtomicInteger(0);
 
     @Override
-    public ProdutoQuimico incluir(ProdutoQuimico produto) {
+    public ProdutoQuimicoBase incluir(ProdutoQuimicoBase produto) {
         Integer id = nextId.getAndIncrement();
         produto.setId(id);
         mapaProdutos.put(id, produto);
@@ -25,17 +25,17 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimico, Intege
     }
 
     @Override
-    public ProdutoQuimico obterPorId(Integer id) {
+    public ProdutoQuimicoBase obterPorId(Integer id) {
         return mapaProdutos.get(id);
     }
 
     @Override
-    public Collection<ProdutoQuimico> obterLista() {
+    public Collection<ProdutoQuimicoBase> obterLista() {
         return mapaProdutos.values();
     }
 
     @Override
-    public ProdutoQuimico atualizar(Integer id, ProdutoQuimico produto) {
+    public ProdutoQuimicoBase atualizar(Integer id, ProdutoQuimicoBase produto) {
         if (!mapaProdutos.containsKey(id)) return null;
 
         produto.setId(id);
