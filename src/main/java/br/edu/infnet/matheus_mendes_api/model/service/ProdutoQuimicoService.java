@@ -19,7 +19,16 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoBase, In
 
     @Override
     public ProdutoQuimicoBase incluir(ProdutoQuimicoBase produto) {
-        var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(produto);
+    	var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
+    	        produto.getFabricanteId(),
+    	        produto.getTipoProduto(),
+    	        produto.getNomeComercial(),
+    	        produto.getRegistroAnvisa(),
+    	        produto.getValidadeRegistroAnvisa(),
+    	        produto.getFormaFarmaceutica(),
+    	        produto.getPrincipioAtivo(),
+    	        produto.getConcentracao(),
+    	        produto.getDiluente());
         
         Integer id = nextId.getAndIncrement();
         novoProduto.setId(id);
