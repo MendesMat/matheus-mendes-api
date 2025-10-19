@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
-import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
 
 @RestController
 @RequestMapping("/api/produtos")

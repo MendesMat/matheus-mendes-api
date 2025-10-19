@@ -15,7 +15,7 @@ public abstract class BaseCrudController<T, ID> {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping({"", "/"})
     public ResponseEntity<T> incluir(@RequestBody T entidade) {
         T resultado = service.incluir(entidade);
         return ResponseEntity.ok(resultado);
@@ -27,7 +27,7 @@ public abstract class BaseCrudController<T, ID> {
         return resultado != null ? ResponseEntity.ok(resultado) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping
+    @GetMapping({"", "/"})
     public ResponseEntity<Collection<T>> buscaTodos() {
         return ResponseEntity.ok(service.obterLista());
     }

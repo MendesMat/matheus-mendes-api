@@ -8,7 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
-import br.edu.infnet.matheus_mendes_api.model.domain.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoFactory;
 
 @Service
 public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoBase, Integer> {
@@ -18,10 +19,13 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoBase, In
 
     @Override
     public ProdutoQuimicoBase incluir(ProdutoQuimicoBase produto) {
+        var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(produto);
+        
         Integer id = nextId.getAndIncrement();
-        produto.setId(id);
-        mapaProdutos.put(id, produto);
-        return produto;
+        novoProduto.setId(id);
+        
+        mapaProdutos.put(id, novoProduto);
+        return novoProduto;
     }
 
     @Override
