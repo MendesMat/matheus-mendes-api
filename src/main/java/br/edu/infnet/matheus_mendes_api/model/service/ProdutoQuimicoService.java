@@ -4,63 +4,80 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import br.edu.infnet.matheus_mendes_api.controllers.dto.ProdutoQuimicoDto;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
 import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
 import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoFactory;
 
 @Service
-public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoBase, Integer> {
+public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Integer> {
 
     private final Map<Integer, ProdutoQuimicoBase> mapaProdutos = new ConcurrentHashMap<>();
     private final AtomicInteger nextId = new AtomicInteger(0);
 
     @Override
-    public ProdutoQuimicoBase incluir(ProdutoQuimicoBase produto) {
-    	var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
-    	        produto.getFabricanteId(),
-    	        produto.getTipoProduto(),
-    	        produto.getNomeComercial(),
-    	        produto.getRegistroAnvisa(),
-    	        produto.getValidadeRegistroAnvisa(),
-    	        produto.getFormaFarmaceutica(),
-    	        produto.getPrincipioAtivo(),
-    	        produto.getConcentracao(),
-    	        produto.getDiluente());
-        
-        Integer id = nextId.getAndIncrement();
+    public ProdutoQuimicoDto incluir(ProdutoQuimicoDto dto) {
+        var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
+            dto.fabricanteId(),
+            dto.tipoProduto(),
+            dto.nomeComercial(),
+            dto.registroAnvisa(),
+            dto.validadeRegistro(),
+            dto.formaFarmaceutica(),
+            dto.principioAtivo(),
+            dto.concentracao(),
+            dto.diluente()
+        );
+
+        var id = nextId.getAndIncrement();
         novoProduto.setId(id);
-        
+
         mapaProdutos.put(id, novoProduto);
-        return novoProduto;
+
+        return ProdutoQuimicoDto.fromEntity(novoProduto);
     }
 
     @Override
-    public ProdutoQuimicoBase obterPorId(Integer id) {
-        return mapaProdutos.get(id);
+    public ProdutoQuimicoDto obterPorId(Integer id) {
+        var produto = mapaProdutos.get(id);
+        return produto != null ? ProdutoQuimicoDto.fromEntity(produto) : null;
     }
 
     @Override
-    public Collection<ProdutoQuimicoBase> obterLista() {
-        return mapaProdutos.values();
+    public Collection<ProdutoQuimicoDto> obterLista() {
+        return mapaProdutos.values().stream()
+                .map(ProdutoQuimicoDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ProdutoQuimicoBase atualizar(Integer id, ProdutoQuimicoBase produto) {
+    public ProdutoQuimicoDto atualizar(Integer id, ProdutoQuimicoDto dto) {
         if (!mapaProdutos.containsKey(id)) return null;
 
-        produto.setId(id);
-        mapaProdutos.put(id, produto);
-        return produto;
+        var produtoAtualizado = ProdutoQuimicoFactory.criarProdutoPorTipo(
+            dto.fabricanteId(),
+            dto.tipoProduto(),
+            dto.nomeComercial(),
+            dto.registroAnvisa(),
+            dto.validadeRegistro(),
+            dto.formaFarmaceutica(),
+            dto.principioAtivo(),
+            dto.concentracao(),
+            dto.diluente()
+        );
+
+        produtoAtualizado.setId(id);
+        mapaProdutos.put(id, produtoAtualizado);
+
+        return ProdutoQuimicoDto.fromEntity(produtoAtualizado);
     }
 
     @Override
     public boolean excluir(Integer id) {
-        if (!mapaProdutos.containsKey(id)) return false;
-
-        mapaProdutos.remove(id);
-        return true;
+        return mapaProdutos.remove(id) != null;
     }
 }
