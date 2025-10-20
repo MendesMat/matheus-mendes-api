@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.matheus_mendes_api.controllers.dto.ProdutoQuimicoDto;
+import br.edu.infnet.matheus_mendes_api.exceptions.ExcecaoRecursoNaoEncontrado;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
 import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
 import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoFactory;
@@ -44,7 +45,10 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
     @Override
     public ProdutoQuimicoDto obterPorId(Integer id) {
         var produto = mapaProdutos.get(id);
-        return produto != null ? ProdutoQuimicoDto.fromEntity(produto) : null;
+        if (produto == null) {
+            throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado.");
+        }
+        return ProdutoQuimicoDto.fromEntity(produto);
     }
 
     @Override
@@ -56,7 +60,9 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
 
     @Override
     public ProdutoQuimicoDto atualizar(Integer id, ProdutoQuimicoDto dto) {
-        if (!mapaProdutos.containsKey(id)) return null;
+        if (!mapaProdutos.containsKey(id)) {
+            throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado para atualização.");
+        }
 
         var produtoAtualizado = ProdutoQuimicoFactory.criarProdutoPorTipo(
             dto.fabricanteId(),
@@ -77,18 +83,25 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
     }
 
     public ProdutoQuimicoDto alterarAtivacao(Integer id) {
-    	var produto = mapaProdutos.get(id);
+        var produto = mapaProdutos.get(id);
         
-        if (produto == null) return null;
-        
+        if (produto == null) {
+            throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado para alteração de ativação.");
+        }
+
         produto.setAtivo(!produto.getAtivo());
         mapaProdutos.put(id, produto);
-        
+
         return ProdutoQuimicoDto.fromEntity(produto);
     }
     
     @Override
     public boolean excluir(Integer id) {
-        return mapaProdutos.remove(id) != null;
+        if (!mapaProdutos.containsKey(id)) {
+            throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado para exclusão.");
+        }
+        
+        mapaProdutos.remove(id);
+        return true;
     }
 }
