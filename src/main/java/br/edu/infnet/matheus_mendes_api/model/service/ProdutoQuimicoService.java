@@ -76,6 +76,17 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
         return ProdutoQuimicoDto.fromEntity(produtoAtualizado);
     }
 
+    public ProdutoQuimicoDto alterarAtivacao(Integer id) {
+    	var produto = mapaProdutos.get(id);
+        
+        if (produto == null) return null;
+        
+        produto.setAtivo(!produto.getAtivo());
+        mapaProdutos.put(id, produto);
+        
+        return ProdutoQuimicoDto.fromEntity(produto);
+    }
+    
     @Override
     public boolean excluir(Integer id) {
         return mapaProdutos.remove(id) != null;

@@ -18,6 +18,7 @@ public abstract class ProdutoQuimicoBase {
 	private String nomeComercial;
 	private String registroAnvisa;
 	private LocalDate validadeRegistro;	
+	private boolean ativo;
 	
 	private FormaFarmaceutica formaFarmaceutica;
 	private PrincipioAtivo principioAtivo;
@@ -37,6 +38,7 @@ public abstract class ProdutoQuimicoBase {
 		this.nomeComercial = nomeComercial;
 		this.registroAnvisa = registroAnvisa;
 		this.validadeRegistro = validadeRegistroAnvisa;
+		this.ativo = true;
 		this.formaFarmaceutica = formaFarmaceutica;
 		this.principioAtivo = principioAtivo;
 		this.concentracao = concentracao;
@@ -61,6 +63,9 @@ public abstract class ProdutoQuimicoBase {
 	
 	public LocalDate getValidadeRegistroAnvisa() { return validadeRegistro; }
 	public void setValidadeRegistroAnvisa(LocalDate validadeRegistroAnvisa) { this.validadeRegistro = validadeRegistroAnvisa; }
+	
+	public boolean getAtivo() { return ativo; }
+	public void setAtivo(boolean ativo) { this.ativo = ativo; }
 	
 	public FormaFarmaceutica getFormaFarmaceutica() { return formaFarmaceutica; }
 	public void setFormaFarmaceutica(FormaFarmaceutica formaFarmaceutica) { this.formaFarmaceutica = formaFarmaceutica; }
@@ -87,6 +92,7 @@ public abstract class ProdutoQuimicoBase {
 	        "Nome Comercial .........: %-20s\n"  +
 	        "Registro ANVISA ........: %-15s\n"  +
 	        "Validade do Registro ...: %-10s\n"  +
+	        "Ativo...................: %-10s\n"  +
 	        "Princípio Ativo ........: %-15s\n"  +
 	        "Concentração ...........: %-6.2f\n" +
 	        "Diluente ...............: %-10s\n"  +
@@ -98,6 +104,7 @@ public abstract class ProdutoQuimicoBase {
 	        nomeComercial,
 	        registroAnvisa,
 	        validadeRegistro,
+	        ativo,
 	        principioAtivo,
 	        concentracao,
 	        diluente,
