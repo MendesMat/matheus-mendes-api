@@ -63,16 +63,17 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
                     : fabricantes.get(fabricantes.size() - 1).getId();
 
             var dto = new ProdutoQuimicoDto(
-                    null, // id atribuido pelo service
-                    fabricanteId,
-                    TipoProduto.valueOf(campos[0].trim()),
-                    campos[1].trim(),
-                    campos[2].trim(),
-                    LocalDate.parse(campos[3].trim()),
-                    FormaFarmaceutica.valueOf(campos[4].trim()),
-                    PrincipioAtivo.valueOf(campos[5].trim()),
-                    Double.parseDouble(campos[6].trim()),
-                    Diluente.valueOf(campos[7].trim())
+                null,
+                fabricanteId,
+                TipoProduto.valueOf(campos[0].trim()),
+                campos[1].trim(),
+                campos[2].trim(),
+                LocalDate.parse(campos[3].trim()),
+                true,
+                FormaFarmaceutica.valueOf(campos[4].trim()),
+                PrincipioAtivo.valueOf(campos[5].trim()),
+                Double.parseDouble(campos[6].trim()),
+                Diluente.valueOf(campos[7].trim())
             );
 
             produtoQuimicoService.incluir(dto);
