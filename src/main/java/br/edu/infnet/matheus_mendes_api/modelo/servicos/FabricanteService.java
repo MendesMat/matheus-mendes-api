@@ -1,4 +1,4 @@
-package br.edu.infnet.matheus_mendes_api.model.service;
+package br.edu.infnet.matheus_mendes_api.modelo.servicos;
 
 import java.util.Collection;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Service;
 
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
-import br.edu.infnet.matheus_mendes_api.model.domain.Fabricante;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 
 @Service
 public class FabricanteService implements CrudService<Fabricante, Integer> {

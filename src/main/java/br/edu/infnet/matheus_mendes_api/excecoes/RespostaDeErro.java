@@ -1,8 +1,8 @@
-package br.edu.infnet.matheus_mendes_api.exceptions;
+package br.edu.infnet.matheus_mendes_api.excecoes;
 
 import java.time.LocalDateTime;
 
-public record RespostaErro(
+public record RespostaDeErro(
         LocalDateTime dataHora,
         int status,
         String erro,

@@ -13,14 +13,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import br.edu.infnet.matheus_mendes_api.controllers.dto.ProdutoQuimicoDto;
-import br.edu.infnet.matheus_mendes_api.model.domain.Fabricante;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.Diluente;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.FormaFarmaceutica;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.PrincipioAtivo;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.TipoProduto;
-import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
-import br.edu.infnet.matheus_mendes_api.model.service.ProdutoQuimicoService;
+import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.Diluente;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.FormaFarmaceutica;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.PrincipioAtivo;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.TipoProduto;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.modelo.servicos.ProdutoQuimicoService;
 
 @Component
 @Order(2)

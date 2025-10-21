@@ -12,8 +12,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import br.edu.infnet.matheus_mendes_api.model.domain.Fabricante;
-import br.edu.infnet.matheus_mendes_api.model.service.FabricanteService;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
+import br.edu.infnet.matheus_mendes_api.modelo.servicos.FabricanteService;
 
 @Component
 @Order(1)

@@ -1,4 +1,4 @@
-package br.edu.infnet.matheus_mendes_api.controllers;
+package br.edu.infnet.matheus_mendes_api.controladores;
 
 import java.util.Collection;
 

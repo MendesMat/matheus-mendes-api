@@ -1,11 +1,11 @@
-package br.edu.infnet.matheus_mendes_api.model.domain.produtos;
+package br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos;
 
 import java.time.LocalDate;
 
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.Diluente;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.FormaFarmaceutica;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.PrincipioAtivo;
-import br.edu.infnet.matheus_mendes_api.model.domain.enums.TipoProduto;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.Diluente;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.FormaFarmaceutica;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.PrincipioAtivo;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.TipoProduto;
 
 public class Desinfetante extends ProdutoQuimicoBase {
 

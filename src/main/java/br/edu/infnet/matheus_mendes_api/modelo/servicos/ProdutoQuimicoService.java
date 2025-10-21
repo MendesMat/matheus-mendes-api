@@ -1,4 +1,4 @@
-package br.edu.infnet.matheus_mendes_api.model.service;
+package br.edu.infnet.matheus_mendes_api.modelo.servicos;
 
 import java.util.Collection;
 import java.util.Map;
@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.edu.infnet.matheus_mendes_api.controllers.dto.ProdutoQuimicoDto;
-import br.edu.infnet.matheus_mendes_api.exceptions.ExcecaoRecursoNaoEncontrado;
+import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
+import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoInvalido;
+import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoNaoEncontrado;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
-import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoBase;
-import br.edu.infnet.matheus_mendes_api.model.domain.produtos.ProdutoQuimicoFactory;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoFactory;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.validacoes.validarProdutoQuimico;
 
 @Service
 public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Integer> {
@@ -22,6 +24,13 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
 
     @Override
     public ProdutoQuimicoDto incluir(ProdutoQuimicoDto dto) {
+    	
+    	if(dto == null) {
+    		throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
+    	}
+    	
+    	validarProdutoQuimico.validarDto(dto);
+    	
         var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
             dto.fabricanteId(),
             dto.tipoProduto(),
@@ -45,6 +54,7 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
     @Override
     public ProdutoQuimicoDto obterPorId(Integer id) {
         var produto = mapaProdutos.get(id);
+        
         if (produto == null) {
             throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado.");
         }
@@ -63,6 +73,8 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
         if (!mapaProdutos.containsKey(id)) {
             throw new ExcecaoRecursoNaoEncontrado("Produto químico com ID " + id + " não encontrado para atualização.");
         }
+        
+        validarProdutoQuimico.validarDto(dto);
 
         var produtoAtualizado = ProdutoQuimicoFactory.criarProdutoPorTipo(
             dto.fabricanteId(),

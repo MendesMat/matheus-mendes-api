@@ -1,4 +1,4 @@
-package br.edu.infnet.matheus_mendes_api.model.domain;
+package br.edu.infnet.matheus_mendes_api.modelo.dominio;
 
 public class Fabricante {
 	// === Properties ===
