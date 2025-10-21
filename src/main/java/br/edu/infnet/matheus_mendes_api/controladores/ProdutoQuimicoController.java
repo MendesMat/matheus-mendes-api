@@ -20,8 +20,8 @@ public class ProdutoQuimicoController extends BaseCrudController<ProdutoQuimicoD
         this.service = service;
     }
     
-    @PatchMapping({"/id/inativar"})
-    public ResponseEntity<ProdutoQuimicoDto> alterarAtivacao(@PathVariable Integer id) {
+    @PatchMapping({"/{id}/ativacao"})
+    public ResponseEntity<ProdutoQuimicoDto> alternarAtivacao(@PathVariable Integer id) {
     	var resultado = service.alterarAtivacao(id);
     	return resultado != null ? 
     			ResponseEntity.ok(resultado) : ResponseEntity.notFound().build();

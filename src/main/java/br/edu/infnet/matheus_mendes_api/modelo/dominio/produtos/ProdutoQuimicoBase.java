@@ -81,6 +81,7 @@ public abstract class ProdutoQuimicoBase {
 	
 	public static void setFabricantesMap(Map<Integer, String> map) { fabricantesMap = map; }
 	
+	// === Methods ===
 	@Override
 	public String toString() {
 		var nomeFabricante = fabricantesMap.get(fabricanteId);

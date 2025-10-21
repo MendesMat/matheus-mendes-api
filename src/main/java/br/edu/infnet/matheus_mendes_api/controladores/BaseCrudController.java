@@ -22,13 +22,13 @@ public abstract class BaseCrudController<T, ID> {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<T> buscaPorId(@PathVariable ID id) {
+    public ResponseEntity<T> buscarPorId(@PathVariable ID id) {
         T resultado = service.obterPorId(id);
         return resultado != null ? ResponseEntity.ok(resultado) : ResponseEntity.notFound().build();
     }
 
     @GetMapping({"", "/"})
-    public ResponseEntity<Collection<T>> buscaTodos() {
+    public ResponseEntity<Collection<T>> buscarTodos() {
         return ResponseEntity.ok(service.obterLista());
     }
 
