@@ -39,4 +39,19 @@ public class TratadorDeExcecoes {
         
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
+    
+    @ExceptionHandler(ExcecaoRecursoDuplicado.class)
+    public ResponseEntity<RespostaDeErro> tratarRecursoDuplicado(
+            ExcecaoRecursoDuplicado ex, WebRequest request) {
+
+        var erro = new RespostaDeErro(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Recurso duplicado",
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
 }

@@ -18,7 +18,7 @@ public abstract class BaseCrudController<T, ID> {
     @PostMapping({"", "/"})
     public ResponseEntity<T> incluir(@RequestBody T entidade) {
         T resultado = service.incluir(entidade);
-        return ResponseEntity.ok(resultado);
+        return ResponseEntity.status(201).body(resultado);
     }
 
     @GetMapping("/{id}")

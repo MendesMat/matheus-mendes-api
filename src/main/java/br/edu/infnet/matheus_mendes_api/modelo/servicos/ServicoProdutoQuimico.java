@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
+import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoDuplicado;
 import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoInvalido;
 import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoNaoEncontrado;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
@@ -27,8 +28,12 @@ public class ServicoProdutoQuimico implements CrudService<ProdutoQuimicoDto, Int
     @Override
     public ProdutoQuimicoDto incluir(ProdutoQuimicoDto dto) {
         if (dto == null) { throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos."); }
-
+        
         validarProdutoQuimico.validarDto(dto);
+        
+        if (repositorio.existsByRegistroAnvisa(dto.registroAnvisa())) {
+            throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
+        }
 
         var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
                 dto.fabricante(),

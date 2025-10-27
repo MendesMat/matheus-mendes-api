@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.repositorios.RepositorioFabricante;
+import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoDuplicado;
 import br.edu.infnet.matheus_mendes_api.excecoes.ExcecaoRecursoNaoEncontrado;
 
 @Service
@@ -21,6 +22,10 @@ public class ServicoFabricante implements CrudService<Fabricante, Integer> {
 
     @Override
     public Fabricante incluir(Fabricante fabricante) {
+    	if (respositorio.existsByCnpj(fabricante.getCnpj())) {
+            throw new ExcecaoRecursoDuplicado("Já existe um fabricante com CNPJ: " + fabricante.getCnpj());
+        }
+    	
         return respositorio.save(fabricante);
     }
 

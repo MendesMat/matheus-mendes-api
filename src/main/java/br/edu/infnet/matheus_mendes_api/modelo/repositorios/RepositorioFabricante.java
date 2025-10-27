@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 
 @Repository
-public interface RepositorioFabricante extends JpaRepository<Fabricante, Integer> {}
+public interface RepositorioFabricante extends JpaRepository<Fabricante, Integer> {
+	boolean existsByCnpj(String cnpj);
+}
