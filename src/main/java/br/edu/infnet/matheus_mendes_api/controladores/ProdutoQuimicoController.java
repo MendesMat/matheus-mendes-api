@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
-import br.edu.infnet.matheus_mendes_api.modelo.servicos.ProdutoQuimicoService;
+import br.edu.infnet.matheus_mendes_api.modelo.servicos.ServicoProdutoQuimico;
 
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoQuimicoController extends BaseCrudController<ProdutoQuimicoDto, Integer> {
 
-	private final ProdutoQuimicoService service;
+	private final ServicoProdutoQuimico service;
 	
-    public ProdutoQuimicoController(ProdutoQuimicoService service) {
+    public ProdutoQuimicoController(ServicoProdutoQuimico service) {
         super(service);
         this.service = service;
     }

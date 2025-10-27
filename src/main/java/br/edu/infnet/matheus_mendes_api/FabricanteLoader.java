@@ -13,15 +13,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
-import br.edu.infnet.matheus_mendes_api.modelo.servicos.FabricanteService;
+import br.edu.infnet.matheus_mendes_api.modelo.servicos.ServicoFabricante;
 
 @Component
 @Order(1)
 public class FabricanteLoader implements ApplicationRunner {
 
-    private final FabricanteService fabricanteService;
+    private final ServicoFabricante fabricanteService;
 
-    public FabricanteLoader(FabricanteService fabricanteService) {
+    public FabricanteLoader(ServicoFabricante fabricanteService) {
         this.fabricanteService = fabricanteService;
     }
 

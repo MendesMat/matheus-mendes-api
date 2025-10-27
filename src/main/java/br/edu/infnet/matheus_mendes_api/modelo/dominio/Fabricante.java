@@ -13,6 +13,8 @@ public class Fabricante {
 	private String cnpj;
 	
 	// === Constructor ===
+	public Fabricante() {}
+	
 	public Fabricante(String nome, String cnpj) {
 		this.nome = nome;
 		this.cnpj = cnpj;

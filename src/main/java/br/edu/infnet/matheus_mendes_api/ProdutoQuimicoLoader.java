@@ -14,16 +14,16 @@ import org.springframework.stereotype.Component;
 import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
-import br.edu.infnet.matheus_mendes_api.modelo.servicos.ProdutoQuimicoService;
+import br.edu.infnet.matheus_mendes_api.modelo.servicos.ServicoProdutoQuimico;
 
 @Component
 @Order(2)
 public class ProdutoQuimicoLoader implements ApplicationRunner {
 
-    private final ProdutoQuimicoService produtoQuimicoService;
+    private final ServicoProdutoQuimico produtoQuimicoService;
     private final FabricanteLoader fabricanteLoader;
 
-    public ProdutoQuimicoLoader(ProdutoQuimicoService produtoQuimicoService, FabricanteLoader fabricanteLoader) {
+    public ProdutoQuimicoLoader(ServicoProdutoQuimico produtoQuimicoService, FabricanteLoader fabricanteLoader) {
         this.produtoQuimicoService = produtoQuimicoService;
         this.fabricanteLoader = fabricanteLoader;
     }
