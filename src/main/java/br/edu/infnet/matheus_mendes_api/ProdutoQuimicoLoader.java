@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,56 +13,75 @@ import org.springframework.stereotype.Component;
 
 import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.Diluente;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.FormaFarmaceutica;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.PrincipioAtivo;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.TipoProduto;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
 import br.edu.infnet.matheus_mendes_api.modelo.servicos.ProdutoQuimicoService;
 
 @Component
 @Order(2)
 public class ProdutoQuimicoLoader implements ApplicationRunner {
-	
-	private final ProdutoQuimicoService produtoQuimicoService;
-	private final FabricanteLoader fabricanteLoader;
-	
-	public ProdutoQuimicoLoader(ProdutoQuimicoService produtoQuimicoService, FabricanteLoader fabricanteLoader) {
+
+    private final ProdutoQuimicoService produtoQuimicoService;
+    private final FabricanteLoader fabricanteLoader;
+
+    public ProdutoQuimicoLoader(ProdutoQuimicoService produtoQuimicoService, FabricanteLoader fabricanteLoader) {
         this.produtoQuimicoService = produtoQuimicoService;
-		this.fabricanteLoader = fabricanteLoader;
+        this.fabricanteLoader = fabricanteLoader;
     }
-	
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		List<Fabricante> fabricantes = fabricanteLoader.getFabricantes();
-		
-		Map<Integer, String> fabricantesMap = fabricantes.stream()
-				.collect(Collectors.toMap(Fabricante::getId, Fabricante::getNome));
-		ProdutoQuimicoBase.setFabricantesMap(fabricantesMap);
-		 
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        List<Fabricante> fabricantes = fabricanteLoader.getFabricantes();
         carregarProdutosQuimicos("produtos-quimicos-listagem.csv", fabricantes);
-        
+
         System.out.println("=== PRODUTOS QUIMICOS ===");
         produtoQuimicoService.obterLista().forEach(System.out::println);
-	}
-	
-	private void carregarProdutosQuimicos(String caminhoArquivo, List<Fabricante> fabricantes) throws IOException {
-	    
-	    BufferedReader leitor = new BufferedReader(new FileReader(caminhoArquivo));
-	    
-	    String linha = null;
-	    int i = 0;
-	    while ((linha = leitor.readLine()) != null) {
-            String[] campos = linha.split(",");
-            if (campos.length < 8) continue;
+    }
 
-            Integer fabricanteId = i < fabricantes.size()
-                    ? fabricantes.get(i).getId()
-                    : fabricantes.get(fabricantes.size() - 1).getId();
+    private void carregarProdutosQuimicos(String caminhoArquivo, List<Fabricante> fabricantes) throws IOException {
+        var leitor = new BufferedReader(new FileReader(caminhoArquivo));
+        var linhaAtual = new String[1];
 
-            var dto = new ProdutoQuimicoDto(
+        var linhaPreenchida = atualizarLinha(leitor, linhaAtual);
+        var i = 0;
+
+        while (linhaPreenchida) {
+        	var linha = linhaAtual[0];
+        	
+            if (linhaValida(linha)) {
+                Fabricante fabricante = escolherFabricante(i, fabricantes);
+                ProdutoQuimicoDto dto = criarDto(linha, fabricante);
+                produtoQuimicoService.incluir(dto);
+                i++;
+            }
+
+            linhaPreenchida = atualizarLinha(leitor, linhaAtual);
+        }
+
+        leitor.close();
+    }
+    
+    private boolean atualizarLinha(BufferedReader leitor, String[] linhaHolder) throws IOException {
+        linhaHolder[0] = leitor.readLine();
+        return linhaHolder[0] != null;
+    }
+
+    private boolean linhaValida(String linha) {
+        String[] campos = linha.split(",");
+        return campos.length >= 8;
+    }
+
+    private Fabricante escolherFabricante(int index, List<Fabricante> fabricantes) {
+        return index < fabricantes.size()
+                ? fabricantes.get(index)
+                : fabricantes.get(fabricantes.size() - 1);
+    }
+
+    private ProdutoQuimicoDto criarDto(String linha, Fabricante fabricante) {
+        String[] campos = linha.split(",");
+
+        return new ProdutoQuimicoDto(
                 null,
-                fabricanteId,
+                fabricante,
                 TipoProduto.valueOf(campos[0].trim()),
                 campos[1].trim(),
                 campos[2].trim(),
@@ -74,12 +91,6 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
                 PrincipioAtivo.valueOf(campos[5].trim()),
                 Double.parseDouble(campos[6].trim()),
                 Diluente.valueOf(campos[7].trim())
-            );
-
-            produtoQuimicoService.incluir(dto);
-            i++;
-        }
-	    
-	    leitor.close();
-	}
+        );
+    }
 }

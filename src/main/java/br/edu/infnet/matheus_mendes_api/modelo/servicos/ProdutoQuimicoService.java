@@ -32,7 +32,7 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
     	validarProdutoQuimico.validarDto(dto);
     	
         var novoProduto = ProdutoQuimicoFactory.criarProdutoPorTipo(
-            dto.fabricanteId(),
+            dto.fabricante(),
             dto.tipoProduto(),
             dto.nomeComercial(),
             dto.registroAnvisa(),
@@ -77,7 +77,7 @@ public class ProdutoQuimicoService implements CrudService<ProdutoQuimicoDto, Int
         validarProdutoQuimico.validarDto(dto);
 
         var produtoAtualizado = ProdutoQuimicoFactory.criarProdutoPorTipo(
-            dto.fabricanteId(),
+            dto.fabricante(),
             dto.tipoProduto(),
             dto.nomeComercial(),
             dto.registroAnvisa(),

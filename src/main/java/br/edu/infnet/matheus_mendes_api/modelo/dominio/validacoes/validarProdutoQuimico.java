@@ -13,7 +13,7 @@ public class validarProdutoQuimico {
             throw new ExcecaoRecursoInvalido("O tipo de produto químico deve ser informado.");
         }
 
-        if (dto.fabricanteId() == null) {
+        if (dto.fabricante() == null) {
             throw new ExcecaoRecursoInvalido("O identificador do fabricante é obrigatório.");
         }
     }

@@ -1,39 +1,45 @@
 package br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
+import jakarta.persistence.*;
 
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.Diluente;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.FormaFarmaceutica;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.PrincipioAtivo;
-import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.TipoProduto;
-
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "produtos")
 public abstract class ProdutoQuimicoBase {
 	// === Properties ===
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private Integer fabricanteId;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "fabricante_id")
+	private Fabricante fabricante;
+	@Enumerated(EnumType.STRING)
 	private TipoProduto tipoProduto;
 	private String nomeComercial;
 	private String registroAnvisa;
 	private LocalDate validadeRegistro;	
 	private boolean ativo;
 	
+
+	@Enumerated(EnumType.STRING)
 	private FormaFarmaceutica formaFarmaceutica;
+	@Enumerated(EnumType.STRING)
 	private PrincipioAtivo principioAtivo;
 	private double concentracao;
+	@Enumerated(EnumType.STRING)
 	private Diluente diluente;
-
-	private static Map<Integer, String> fabricantesMap = new HashMap<>();
 	
 	// === Constructor ===
 	public ProdutoQuimicoBase() { }
 	
-	public ProdutoQuimicoBase(Integer fabricanteId, TipoProduto tipoProduto, String nomeComercial, String registroAnvisa,
+	public ProdutoQuimicoBase(Fabricante fabricante, TipoProduto tipoProduto, String nomeComercial, String registroAnvisa,
 			LocalDate validadeRegistroAnvisa, FormaFarmaceutica formaFarmaceutica, PrincipioAtivo principioAtivo,
 			double concentracao, Diluente diluente) {
-		this.fabricanteId = fabricanteId;
+		this.fabricante = fabricante;
 		this.tipoProduto = tipoProduto;
 		this.nomeComercial = nomeComercial;
 		this.registroAnvisa = registroAnvisa;
@@ -49,8 +55,8 @@ public abstract class ProdutoQuimicoBase {
 	public Integer getId() { return id; }
 	public void setId(Integer id) { this.id = id; }
 	
-	public Integer getFabricanteId() { return fabricanteId; }
-	public void setFabricanteId(Integer fabricanteId) { this.fabricanteId = fabricanteId; }
+	public Fabricante getFabricante() { return fabricante; }
+	public void setFabricante(Fabricante fabricante) { this.fabricante = fabricante; }
 	
 	public TipoProduto getTipoProduto() { return tipoProduto; }
 	public void setTipoProduto(TipoProduto tipoProduto) { this.tipoProduto = tipoProduto; }
@@ -79,13 +85,9 @@ public abstract class ProdutoQuimicoBase {
 	public Diluente getDiluente() { return diluente; }
 	public void setDiluente(Diluente diluente) { this.diluente = diluente; }
 	
-	public static void setFabricantesMap(Map<Integer, String> map) { fabricantesMap = map; }
-	
 	// === Methods ===
 	@Override
 	public String toString() {
-		var nomeFabricante = fabricantesMap.get(fabricanteId);
-		
 	    return String.format(
     		"Id .....................: %d\n"     +
 			"Fabricante .............: %-20s\n"  +
@@ -100,7 +102,7 @@ public abstract class ProdutoQuimicoBase {
 	        "Forma Farmacêutica .....: %-10s\n"  ,
 	        
 	        id,
-	        nomeFabricante,
+	        fabricante.getNome(),
 	        tipoProduto,
 	        nomeComercial,
 	        registroAnvisa,

@@ -1,7 +1,13 @@
 package br.edu.infnet.matheus_mendes_api.modelo.dominio;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name="fabricantes")
 public class Fabricante {
 	// === Properties ===
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String cnpj;
