@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -16,15 +18,22 @@ public abstract class ProdutoQuimicoBase {
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "fabricante_id")
+	@NotNull(message = "O fabricante é obrigatório.")
 	private Fabricante fabricante;
+	
 	@Enumerated(EnumType.STRING)
+	@NotNull(message = "O tipo de produto é obrigatório.")
 	private TipoProduto tipoProduto;
+	
+	@NotBlank(message = "O nome comercial é obrigatório.")
 	private String nomeComercial;
+	
+	@NotBlank(message = "O registro ANVISA é obrigatório.")
 	private String registroAnvisa;
+	
 	private LocalDate validadeRegistro;	
 	private boolean ativo;
 	
-
 	@Enumerated(EnumType.STRING)
 	private FormaFarmaceutica formaFarmaceutica;
 	@Enumerated(EnumType.STRING)

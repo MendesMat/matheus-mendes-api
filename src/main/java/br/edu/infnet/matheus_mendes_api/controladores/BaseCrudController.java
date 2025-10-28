@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
+import jakarta.validation.Valid;
 
 public abstract class BaseCrudController<T, ID> {
 
@@ -16,7 +17,7 @@ public abstract class BaseCrudController<T, ID> {
     }
 
     @PostMapping({"", "/"})
-    public ResponseEntity<T> incluir(@RequestBody T entidade) {
+    public ResponseEntity<T> incluir(@Valid @RequestBody T entidade) {
         T resultado = service.incluir(entidade);
         return ResponseEntity.status(201).body(resultado);
     }
