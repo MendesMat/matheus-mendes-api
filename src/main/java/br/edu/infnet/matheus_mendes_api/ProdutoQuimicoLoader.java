@@ -90,7 +90,10 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
                 FormaFarmaceutica.valueOf(campos[4].trim()),
                 PrincipioAtivo.valueOf(campos[5].trim()),
                 Double.parseDouble(campos[6].trim()),
-                Diluente.valueOf(campos[7].trim())
+                Diluente.valueOf(campos[7].trim()),
+                null,
+                null,
+                null
         );
     }
 }

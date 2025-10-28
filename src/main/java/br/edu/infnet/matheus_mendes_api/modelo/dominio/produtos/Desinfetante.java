@@ -11,13 +11,20 @@ import jakarta.persistence.Table;
 @Table(name = "desinfetantes")
 public class Desinfetante extends ProdutoQuimicoBase {
 
-	// === Constructor ===
-	public Desinfetante() { }
-	
-	public Desinfetante(Fabricante fabricante, TipoProduto tipoProduto, String nomeComercial, String registroAnvisa,
-			LocalDate validadeRegistroAnvisa, FormaFarmaceutica formaFarmaceutica,
-			PrincipioAtivo principioAtivo, double concentracao, Diluente diluente) {
-		super(fabricante, tipoProduto, nomeComercial, registroAnvisa, validadeRegistroAnvisa, formaFarmaceutica, principioAtivo,
-				concentracao, diluente);
-	}
+    private boolean usoHospitalar;
+
+    public Desinfetante() {}
+
+    public Desinfetante(Fabricante fabricante, TipoProduto tipoProduto, String nomeComercial, String registroAnvisa, 
+    		LocalDate validadeRegistroAnvisa, FormaFarmaceutica formaFarmaceutica, PrincipioAtivo principioAtivo, 
+    		double concentracao, Diluente diluente, boolean usoHospitalar) {
+        
+    	super(fabricante, tipoProduto, nomeComercial, registroAnvisa, validadeRegistroAnvisa,
+              formaFarmaceutica, principioAtivo, concentracao, diluente);
+        
+    	this.usoHospitalar = usoHospitalar;
+    }
+
+    public boolean isUsoHospitalar() { return usoHospitalar; }
+    public void setUsoHospitalar(boolean usoHospitalar) { this.usoHospitalar = usoHospitalar; }
 }
