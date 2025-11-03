@@ -5,11 +5,19 @@ import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.*;
 public class MapeadorProdutoQuimico {
 
     public static ProdutoQuimicoDto aPartirDeEntidade(ProdutoQuimicoBase produto) {
-        CamposEspecificos tipoDeProduto = extrairTipoDeProduto(produto);
+        
+    	CamposEspecificos tipoDeProduto = extrairTipoDeProduto(produto);
 
+    	var fabricante = produto.getFabricante();
+    	var fabricanteDto = new FabricanteDto(
+    			fabricante.getId(),
+    			fabricante.getNome(),
+    			fabricante.getCnpj()
+		);
+    	
         return new ProdutoQuimicoDto(
             produto.getId(),
-            produto.getFabricante(),
+            fabricanteDto,
             produto.getTipoProduto(),
             produto.getNomeComercial(),
             produto.getRegistroAnvisa(),

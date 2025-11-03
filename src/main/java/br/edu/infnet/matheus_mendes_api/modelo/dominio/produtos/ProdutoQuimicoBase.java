@@ -2,7 +2,7 @@ package br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
@@ -26,7 +26,7 @@ public abstract class ProdutoQuimicoBase {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "fabricante_id")
 	@NotNull(message = "O fabricante é obrigatório.")
-	@JsonBackReference
+	@JsonIgnoreProperties("produtos")
 	private Fabricante fabricante;
 	
 	@Enumerated(EnumType.STRING)

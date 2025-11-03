@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import br.edu.infnet.matheus_mendes_api.controladores.dto.FabricanteDto;
 import br.edu.infnet.matheus_mendes_api.controladores.dto.ProdutoQuimicoDto;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
@@ -80,9 +81,14 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
     private ProdutoQuimicoDto criarDto(String linha, Fabricante fabricante) {
         String[] campos = linha.split(",");
 
+        var fabricanteDto = new FabricanteDto(
+        		fabricante.getId(), 
+        		fabricante.getNome(), 
+        		fabricante.getCnpj());
+        
         return new ProdutoQuimicoDto(
                 null,
-                fabricante,
+                fabricanteDto,
                 TipoProduto.valueOf(campos[0].trim()),
                 campos[1].trim(),
                 campos[2].trim(),

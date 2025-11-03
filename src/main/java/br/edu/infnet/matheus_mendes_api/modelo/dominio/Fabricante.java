@@ -2,9 +2,6 @@ package br.edu.infnet.matheus_mendes_api.modelo.dominio;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,9 +26,8 @@ public class Fabricante {
 	private String cnpj;
 	
 	@OneToMany(mappedBy = "fabricante", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	@JsonManagedReference
     private List<ProdutoQuimicoBase> produtos;
-	
+
 	// === Constructor ===
 	public Fabricante() {}
 	
@@ -49,6 +45,8 @@ public class Fabricante {
 	
 	public String getCnpj() { return cnpj; }
 	public void setCnpj(String cnpj) { this.cnpj = cnpj; }
+	
+	public List<ProdutoQuimicoBase> getProdutos() { return produtos; }
 	
 	// === Methods ===
 	public String toString() {

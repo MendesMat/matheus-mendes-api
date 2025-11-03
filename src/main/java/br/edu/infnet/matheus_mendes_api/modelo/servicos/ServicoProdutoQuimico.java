@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import br.edu.infnet.matheus_mendes_api.controladores.dto.*;
 import br.edu.infnet.matheus_mendes_api.excecoes.*;
 import br.edu.infnet.matheus_mendes_api.interfaces.CrudService;
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoFactory;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.validacoes.validarProdutoQuimico;
+import br.edu.infnet.matheus_mendes_api.modelo.repositorios.RepositorioFabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.repositorios.RepositorioProdutoQuimico;
 
 @Service
@@ -19,35 +21,43 @@ import br.edu.infnet.matheus_mendes_api.modelo.repositorios.RepositorioProdutoQu
 public class ServicoProdutoQuimico implements CrudService<ProdutoQuimicoDto, Integer> {
 
     private final RepositorioProdutoQuimico repositorio;
+    private final RepositorioFabricante repositorioFabricante;
 
-    public ServicoProdutoQuimico(RepositorioProdutoQuimico repositorio) {
+    public ServicoProdutoQuimico(RepositorioProdutoQuimico repositorio, RepositorioFabricante repositorioFabricante) {
         this.repositorio = repositorio;
+        this.repositorioFabricante = repositorioFabricante;
     }
 
     @Override
     public ProdutoQuimicoDto incluir(ProdutoQuimicoDto dto) {
-        if (dto == null) throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
+        if (dto == null)
+            throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
 
         validarProdutoQuimico.validarDto(dto);
 
         if (repositorio.existsByRegistroAnvisa(dto.registroAnvisa()))
-        	throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
+            throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
 
-        ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto);
+        var fabricante = repositorioFabricante.findById(dto.fabricante().id())
+                .orElseThrow(() -> new ExcecaoRecursoInvalido("Fabricante precisa existir no banco."));
+
+        ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto, fabricante);
         ProdutoQuimicoBase salvo = repositorio.save(produto);
+
         return MapeadorProdutoQuimico.aPartirDeEntidade(salvo);
     }
-    
-    // Utilizado apenas pelo loader
-    public ProdutoQuimicoBase incluirEntidade(ProdutoQuimicoDto dto) {
-        if (dto == null) throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
 
+    // Chamado apenas pelo loader
+    public ProdutoQuimicoBase incluirEntidade(ProdutoQuimicoDto dto) {
         validarProdutoQuimico.validarDto(dto);
 
         if (repositorio.existsByRegistroAnvisa(dto.registroAnvisa()))
-            throw new ExcecaoRecursoDuplicado( "Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
+            throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
 
-        ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto);
+        Fabricante fabricante = repositorioFabricante.findById(dto.fabricante().id())
+                .orElseThrow(() -> new ExcecaoRecursoInvalido("Fabricante precisa existir no banco."));
+
+        ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto, fabricante);
         return repositorio.save(produto);
     }
 
@@ -72,7 +82,10 @@ public class ServicoProdutoQuimico implements CrudService<ProdutoQuimicoDto, Int
 
         validarProdutoQuimico.validarDto(dto);
 
-        ProdutoQuimicoBase produtoAtualizado = ProdutoQuimicoFactory.criarProduto(dto);
+        Fabricante fabricante = repositorioFabricante.findById(dto.fabricante().id())
+                .orElseThrow(() -> new ExcecaoRecursoInvalido("Fabricante precisa existir no banco."));
+
+        ProdutoQuimicoBase produtoAtualizado = ProdutoQuimicoFactory.criarProduto(dto, fabricante);
         produtoAtualizado.setId(id);
         ProdutoQuimicoBase salvo = repositorio.save(produtoAtualizado);
 
@@ -95,5 +108,21 @@ public class ServicoProdutoQuimico implements CrudService<ProdutoQuimicoDto, Int
         ProdutoQuimicoBase salvo = repositorio.save(produto);
 
         return MapeadorProdutoQuimico.aPartirDeEntidade(salvo);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<ProdutoQuimicoDto> buscarPorNome(String nome) {
+        return repositorio.findByNomeComercialContainingIgnoreCase(nome)
+                .stream()
+                .map(MapeadorProdutoQuimico::aPartirDeEntidade)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<ProdutoQuimicoDto> buscarPorConcentracao(double minimo, double maximo) {
+        return repositorio.findByConcentracaoBetween(minimo, maximo)
+                .stream()
+                .map(MapeadorProdutoQuimico::aPartirDeEntidade)
+                .toList();
     }
 }

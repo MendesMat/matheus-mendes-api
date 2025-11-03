@@ -2,6 +2,7 @@ package br.edu.infnet.matheus_mendes_api.controladores;
 
 import org.springframework.web.bind.annotation.*;
 
+import br.edu.infnet.matheus_mendes_api.controladores.dto.FabricanteComProdutosDto;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.servicos.ServicoFabricante;
 
@@ -17,7 +18,7 @@ public class FabricanteController extends BaseCrudController<Fabricante, Integer
     }
 
     @GetMapping("/{id}/produtos")
-    public Fabricante obterFabricanteComProdutos(@PathVariable Integer id) {
+    public FabricanteComProdutosDto obterFabricanteComProdutos(@PathVariable Integer id) {
         return servico.obterComProdutos(id);
     }
 }
