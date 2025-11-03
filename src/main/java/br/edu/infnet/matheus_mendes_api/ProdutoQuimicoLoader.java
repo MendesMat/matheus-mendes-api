@@ -48,9 +48,10 @@ public class ProdutoQuimicoLoader implements ApplicationRunner {
         	var linha = linhaAtual[0];
         	
             if (linhaValida(linha)) {
-                Fabricante fabricante = escolherFabricante(i, fabricantes);
-                ProdutoQuimicoDto dto = criarDto(linha, fabricante);
-                produtoQuimicoService.incluir(dto);
+                var fabricante = escolherFabricante(i, fabricantes);
+                var dto = criarDto(linha, fabricante);
+                var produto = produtoQuimicoService.incluirEntidade(dto);
+                fabricante.adicionarProduto(produto);
                 i++;
             }
 

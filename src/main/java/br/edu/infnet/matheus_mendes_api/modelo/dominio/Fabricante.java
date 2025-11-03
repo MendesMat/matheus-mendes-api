@@ -1,7 +1,14 @@
 package br.edu.infnet.matheus_mendes_api.modelo.dominio;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos.ProdutoQuimicoBase;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name="fabricantes")
@@ -15,7 +22,15 @@ public class Fabricante {
 	private String nome;
 	
 	@NotBlank(message = "O CNPJ do fabricante é obrigatório.")
+	@Pattern(
+	    regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}",
+	    message = "O CNPJ deve estar no formato XX.XXX.XXX/XXXX-XX"
+	)
 	private String cnpj;
+	
+	@OneToMany(mappedBy = "fabricante", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JsonManagedReference
+    private List<ProdutoQuimicoBase> produtos;
 	
 	// === Constructor ===
 	public Fabricante() {}
@@ -44,5 +59,11 @@ public class Fabricante {
 			nome,
 			cnpj
 		);
+	}
+	
+	public void adicionarProduto(ProdutoQuimicoBase produto) {
+	    if (produtos != null && !produtos.contains(produto)) {
+	        produtos.add(produto);
+	    }
 	}
 }

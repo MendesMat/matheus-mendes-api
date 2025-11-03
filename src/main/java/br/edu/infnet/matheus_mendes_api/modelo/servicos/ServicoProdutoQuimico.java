@@ -26,17 +26,29 @@ public class ServicoProdutoQuimico implements CrudService<ProdutoQuimicoDto, Int
 
     @Override
     public ProdutoQuimicoDto incluir(ProdutoQuimicoDto dto) {
-        if (dto == null) 
-            throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
+        if (dto == null) throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
 
         validarProdutoQuimico.validarDto(dto);
 
         if (repositorio.existsByRegistroAnvisa(dto.registroAnvisa()))
-            throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
+        	throw new ExcecaoRecursoDuplicado("Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
 
         ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto);
         ProdutoQuimicoBase salvo = repositorio.save(produto);
         return MapeadorProdutoQuimico.aPartirDeEntidade(salvo);
+    }
+    
+    // Utilizado apenas pelo loader
+    public ProdutoQuimicoBase incluirEntidade(ProdutoQuimicoDto dto) {
+        if (dto == null) throw new ExcecaoRecursoInvalido("Os dados do produto químico não podem ser nulos.");
+
+        validarProdutoQuimico.validarDto(dto);
+
+        if (repositorio.existsByRegistroAnvisa(dto.registroAnvisa()))
+            throw new ExcecaoRecursoDuplicado( "Já existe um produto com registro ANVISA: " + dto.registroAnvisa());
+
+        ProdutoQuimicoBase produto = ProdutoQuimicoFactory.criarProduto(dto);
+        return repositorio.save(produto);
     }
 
     @Override

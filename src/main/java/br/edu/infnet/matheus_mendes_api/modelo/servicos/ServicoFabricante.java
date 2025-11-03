@@ -59,4 +59,10 @@ public class ServicoFabricante implements CrudService<Fabricante, Integer> {
         respositorio.deleteById(id);
         return true;
     }
+    
+    @Transactional(readOnly = true)
+    public Fabricante obterComProdutos(Integer id) {
+        return respositorio.findByIdComProdutos(id)
+                .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Fabricante com ID " + id + " não encontrado."));
+    }
 }

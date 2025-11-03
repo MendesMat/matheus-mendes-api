@@ -1,11 +1,18 @@
 package br.edu.infnet.matheus_mendes_api.modelo.dominio.produtos;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.Fabricante;
 import br.edu.infnet.matheus_mendes_api.modelo.dominio.enums.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -19,6 +26,7 @@ public abstract class ProdutoQuimicoBase {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "fabricante_id")
 	@NotNull(message = "O fabricante é obrigatório.")
+	@JsonBackReference
 	private Fabricante fabricante;
 	
 	@Enumerated(EnumType.STRING)
@@ -29,16 +37,27 @@ public abstract class ProdutoQuimicoBase {
 	private String nomeComercial;
 	
 	@NotBlank(message = "O registro ANVISA é obrigatório.")
+	@Pattern(
+	    regexp = "ANV\\d{6}",
+	    message = "O registro ANVISA deve estar no formato ANV123456"
+	)
 	private String registroAnvisa;
 	
-	private LocalDate validadeRegistro;	
+	@Future(message = "A validade do registro ANVISA deve estar no futuro.")
+	private LocalDate validadeRegistro;
+	
 	private boolean ativo;
 	
 	@Enumerated(EnumType.STRING)
 	private FormaFarmaceutica formaFarmaceutica;
+	
 	@Enumerated(EnumType.STRING)
 	private PrincipioAtivo principioAtivo;
+	
+	@DecimalMin(value = "0.0001", inclusive = true, message = "A concentração mínima deve ser maior que 0.")
+	@DecimalMax(value = "99.0", inclusive = true, message = "A concentração máxima permitida é 99%.")
 	private double concentracao;
+	
 	@Enumerated(EnumType.STRING)
 	private Diluente diluente;
 	
